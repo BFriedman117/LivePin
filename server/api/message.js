@@ -3,9 +3,7 @@ const {Message} = require('../db/models')
 module.exports = router
 
 router.get('/:id', (req, res, next) => {
-  Message.findById({
-    id: req.body.id
-  })
+  Message.findById(req.params.id)
   .then(message => res.json(message))
   .catch(next)
 })

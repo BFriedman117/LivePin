@@ -10,7 +10,7 @@ const Message = db.define('message', {
     type: Sequelize.STRING
   },
   phone: {
-    type: Sequelize.INTEGER
+    type: Sequelize.STRING
   }
 })
 
