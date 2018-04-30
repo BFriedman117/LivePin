@@ -19,12 +19,7 @@ class Message extends Component {
   render(){
     return (
       <div>
-        <div>
-          HI THERE!
-        </div>
-        <div>ID is:</div>
-        <div>{this.props.match.params.id}</div>
-        <div>Body is:</div>
+        <div>The message is:</div>
         <div>{this.state.message}</div>
       </div>
     )

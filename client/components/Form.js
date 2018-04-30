@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 
+
 class Form extends Component {
   state = {
     body: '',
@@ -10,6 +11,7 @@ class Form extends Component {
   }
 
   isValidNum = string => {
+    //Doesnt actually work that well, needs fixing
     const numbers = '0123456789-'.split('')
     let i;
     for (i = 0; i < string.length; i++){
@@ -22,6 +24,7 @@ class Form extends Component {
   }
 
   handleInput = (value, type) => {
+    //Also needs fixing
     if (type === 'phone'){
       if (this.isValidNum(value) && value.length <= 10){
         this.setState({ phone: value })
@@ -40,7 +43,6 @@ class Form extends Component {
       phone: this.state.phone !== '' ? this.state.phone : null
     }
     axios.post('/api/message', message)
-    .then(res => console.log(res))
     .then(() => {
       this.setState({
         body: '',
