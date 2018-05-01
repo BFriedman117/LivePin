@@ -18,35 +18,50 @@ class Form extends Component {
     this.setState({ focus })
   }
 
-  handleSuccess = type => {
-    let success = null
-    if (type === 'phone'){
-      success = this.state.validPhone
-    } else if (type === 'email'){
-      success = this.state.validEmail
-    } else if (type === 'message'){
-      success = this.state.body !== ''
-    }
+  // Message
 
-    if (success){
+  handleMessage = body => {
+    if (body.length < 40) {
+      this.setState({ body })
+      this.resetSuccess()
+    }
+  }
+
+  // Contact Method
+
+  setMethod = method => {
+    this.setState({ method })
+  }
+
+  returnContactMethod = () => {
+    if (this.state.method === 'email'){
       return (
-        <div className="input-success">✓</div>
+        <div className="form-field" >
+          <div className={this.state.focus === 'email' ? 'form-header active' : 'form-header'}>Email Address:</div>
+          <div className={this.state.focus === 'email' ? 'input-container active' : 'input-container'} onClick={() => this.handleFocus('email')}>
+            <input className="form-input" onChange={evt => this.handleEmail(evt.target.value)} value={this.state.email} placeholder="Enter your email address" />
+            {
+              this.handleSuccess('email')
+            }
+          </div>
+        </div>
+      )
+    } else if (this.state.method === 'phone'){
+      return (
+        <div className="form-field" >
+          <div className={this.state.focus === 'phone' ? 'form-header active' : 'form-header'}>Phone Number:</div>
+          <div className={this.state.focus === 'phone' ? 'input-container active' : 'input-container'} onClick={() => this.handleFocus('phone')}>
+            <input className="form-input" onChange={evt => this.handlePhone(evt.target.value)} value={this.state.phone} placeholder="Enter your phone number" />
+            {
+              this.handleSuccess('phone')
+            }
+          </div>
+        </div>
       )
     }
   }
 
-  resetSuccess = () => {
-    this.setState({ success: null })
-  }
-
-  handleResponse = () => {
-    return (
-      <div className="success-message-container">
-        <div className="success-header">Success!</div>
-        <div className="form-header">Your message is on its way</div>
-      </div>
-    )
-  }
+  // Phone
 
   parsePhone = input => {
     let numbers = '0123456789'.split('')
@@ -79,12 +94,7 @@ class Form extends Component {
     this.resetSuccess()
   }
 
-  handleMessage = body => {
-    if (body.length < 40) {
-      this.setState({ body })
-      this.resetSuccess()
-    }
-  }
+  // Email
 
   validateEmail = email => {
     let re = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -99,16 +109,33 @@ class Form extends Component {
     this.resetSuccess()
   }
 
+
+  // Form Submission && Validation
+
   validateSubmit = () => {
     if (this.state.body === ''){
-      console.log('nobody')
       return false
     } else if (this.state.validEmail || this.state.phone.length === 12) {
-      console.log('looking good')
       return true
     } else {
-      console.log('youre missing something')
       return false
+    }
+  }
+
+  handleSuccess = type => {
+    let success = null
+    if (type === 'phone'){
+      success = this.state.validPhone
+    } else if (type === 'email'){
+      success = this.state.validEmail
+    } else if (type === 'message'){
+      success = this.state.body !== ''
+    }
+
+    if (success){
+      return (
+        <div className="input-success">✓</div>
+      )
     }
   }
 
@@ -129,43 +156,26 @@ class Form extends Component {
           phone: '',
           success
         })
-        return response
       })
-      .then(response => console.log('the response is: ', response.status))
       .catch(err => console.log(err))
+    } else {
+      let form = document.getElementsByClassName('form-container')[0]
+      form.classList.add('failure')
     }
   }
 
-  setMethod = method => {
-    this.setState({ method })
+
+  handleResponse = () => {
+    return (
+      <div className="success-message-container">
+        <div className="success-header">Success!</div>
+        <div className="form-header">Your message is on its way</div>
+      </div>
+    )
   }
 
-  returnContactMethod = () => {
-    if (this.state.method === 'email'){
-      return (
-        <div className="form-field" >
-          <div className={this.state.focus === 'email' ? 'form-header active' : 'form-header'}>Email Address:</div>
-          <div className={this.state.focus === 'email' ? 'input-container active' : 'input-container'} onClick={() => this.handleFocus('email')}>
-            <input className="form-input" onChange={evt => this.handleEmail(evt.target.value)} value={this.state.email} placeholder="Enter your email address" />
-            {
-              this.handleSuccess('email')
-            }
-          </div>
-        </div>
-      )
-    } else if (this.state.method === 'phone'){
-      return (
-        <div className="form-field" >
-          <div className={this.state.focus === 'phone' ? 'form-header active' : 'form-header'}>Phone Number:</div>
-          <div className={this.state.focus === 'phone' ? 'input-container active' : 'input-container'} onClick={() => this.handleFocus('phone')}>
-            <input className="form-input" onChange={evt => this.handlePhone(evt.target.value)} value={this.state.phone} placeholder="Enter your phone number" />
-            {
-              this.handleSuccess('phone')
-            }
-          </div>
-        </div>
-      )
-    }
+  resetSuccess = () => {
+    this.setState({ success: null })
   }
 
   render (){

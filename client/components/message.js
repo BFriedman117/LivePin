@@ -19,8 +19,8 @@ class Message extends Component {
   render(){
     return (
       <div className="form-container">
-        <div className="form-header">The message is:</div>
-        <div>{this.state.message}</div>
+        <div className="message-header">The message is:</div>
+        <div className="message-text">{this.state.message}</div>
       </div>
     )
   }
