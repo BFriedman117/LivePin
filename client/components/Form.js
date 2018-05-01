@@ -35,6 +35,10 @@ class Form extends Component {
     }
   }
 
+  resetSuccess = () => {
+    this.setState({ success: null })
+  }
+
   handleResponse = () => {
     return (
       <div className="success-message-container">
@@ -72,11 +76,13 @@ class Form extends Component {
     let parseInput = this.parsePhone(input)
     let phone = this.displayPhone(parseInput)
     this.setState({ phone })
+    this.resetSuccess()
   }
 
   handleMessage = body => {
     if (body.length < 40) {
       this.setState({ body })
+      this.resetSuccess()
     }
   }
 
@@ -90,6 +96,7 @@ class Form extends Component {
   handleEmail = email => {
     let validEmail = this.validateEmail(email)
     this.setState({ email, validEmail })
+    this.resetSuccess()
   }
 
   validateSubmit = () => {
@@ -167,7 +174,7 @@ class Form extends Component {
           <div className="form-field" >
             <div className={this.state.focus === 'message' ? 'form-header active' : 'form-header'}>Message:</div>
             <div className={this.state.focus === 'message' ? 'input-container active' : 'input-container'} onClick={() => this.handleFocus('message')}>
-              <input className="form-input" onChange={evt => this.handleMessage(evt.target.value)} value={this.state.body} placeholder="Enter a short message for yourself (40 chars)" />
+              <input className="form-input" onChange={evt => this.handleMessage(evt.target.value)} value={this.state.body} placeholder="Enter a short message for yourself" />
               {
                 this.handleSuccess('message')
               }
@@ -184,7 +191,7 @@ class Form extends Component {
             <div className="form-submit-container">
               <button className="form-submit" onClick={this.handleSubmit}>Submit</button>
               {
-                this.state.success ? this.handleResponse () : null
+                this.state.success ? this.handleResponse() : null
               }
             </div>
           </div>
