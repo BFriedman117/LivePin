@@ -6,41 +6,60 @@ class Form extends Component {
   state = {
     body: '',
     email: '',
+    validEmail: false,
     phone: '',
-    method: null
+    method: 'email'
   }
 
-  isValidNum = string => {
-    //Doesnt actually work that well, needs fixing
-    const numbers = '0123456789-'.split('')
-    let i;
-    for (i = 0; i < string.length; i++){
-      if (numbers.indexOf(string[i]) === -1) {
-        return false
-      } else {
-        return true
+  parsePhone = input => {
+    let numbers = '0123456789'.split('')
+    let parsedNumber = ''
+    for (let i = 0; i < 12; i++){
+      if (numbers.indexOf(input[i]) > -1){
+        parsedNumber += input[i]
       }
+    }
+    return parsedNumber
+  }
+
+  displayPhone = input => {
+    let output = ''
+    for (let i = 0; i < input.length; i++){
+      if (output.length === 3 || output.length === 7){
+        output += '-'
+      }
+      output += input[i]
+    }
+    return output
+  }
+
+  handlePhone = input => {
+    let phone = this.parsePhone(input)
+    let test = this.displayPhone(phone)
+    this.setState({ phone: test })
+  }
+
+  handleMessage = body => {
+    if (body.length < 40) {
+      this.setState({ body })
     }
   }
 
-  handleInput = (value, type) => {
-    //Also needs fixing
-    if (type === 'phone'){
-      if (this.isValidNum(value) && value.length <= 10){
-        this.setState({ phone: value })
-      }
-    } else {
-      this.setState({
-        [type]: value
-      })
-    }
+  validateEmail = email => {
+    let re = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  handleEmail = email => {
+    let validEmail = this.validateEmail(email)
+    this.setState({ email, validEmail })
   }
 
   handleSubmit = () => {
     let message = {
       body: this.state.body,
       email: this.state.email !== '' ? this.state.email : null,
-      phone: this.state.phone !== '' ? this.state.phone : null
+      phone: this.state.phone !== '' ? this.parsePhone(this.state.phone) : null
     }
     axios.post('/api/message', message)
     .then(() => {
@@ -48,11 +67,10 @@ class Form extends Component {
         body: '',
         email: '',
         phone: '',
-        method: null
+        method: 'email'
       })
     })
     .catch(err => console.log(err))
-
   }
 
   setMethod = method => {
@@ -63,15 +81,15 @@ class Form extends Component {
     if (this.state.method === 'email'){
       return (
         <div className="form-field" >
-          <div>Email:</div>
-          <input onChange={evt => this.handleInput(evt.target.value, 'email')} value={this.state.email} />
+          <div className="form-header">Email Address:</div>
+          <input className="form-input" onChange={evt => this.handleEmail(evt.target.value)} value={this.state.email} placeholder="Enter your email address" />
         </div>
       )
     } else if (this.state.method === 'text'){
       return (
         <div className="form-field" >
-          <div>Phone:</div>
-          <input onChange={evt => this.handleInput(evt.target.value, 'phone')} value={this.state.phone} />
+          <div className="form-header">Phone Number:</div>
+          <input className="form-input" onChange={evt => this.handlePhone(evt.target.value)} value={this.state.phone} placeholder="Enter your phone number" />
         </div>
       )
     }
@@ -79,19 +97,21 @@ class Form extends Component {
 
   render (){
     return (
-      <div>
+      <div className="form-container">
           <div className="form-field" >
-            <div>Message:</div>
-            <textarea onChange={evt => this.handleInput(evt.target.value, 'body')} value={this.state.body} />
+            <div className="form-header">Message:</div>
+            <input className="form-input" onChange={evt => this.handleMessage(evt.target.value)} value={this.state.body} placeholder="Type a short message for yourself" />
           </div>
-          <div>
-            <button onClick={() => this.setMethod('email')}>Send Email</button>
-            <button onClick={() => this.setMethod('text')}>Send Text Message</button>
+          <div className="form-field method">
+            <button className={this.state.method === 'email' ? 'form-method-button active' : 'form-method-button'} onClick={() => this.setMethod('email')}>Send Email</button>
+            <button className={this.state.method === 'text' ? 'form-method-button active' : 'form-method-button'} onClick={() => this.setMethod('text')}>Send Text Message</button>
           </div>
           {
             this.returnMethod()
           }
-          <button onClick={this.handleSubmit}>Submit</button>
+          <div className="form-field">
+            <button className="form-submit" onClick={this.handleSubmit}>Submit</button>
+          </div>
       </div>
     )
   }

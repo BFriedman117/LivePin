@@ -1,5 +1,7 @@
 body {
   font-family: sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 a {
@@ -15,7 +17,76 @@ nav a {
   margin: 1em;
 }
 
-form div {
-  margin: 1em;
-  display: inline-block;
+.form-input::placeholder {
+  color: #cacdd1;
+}
+
+.form-container {
+  padding: 15px 25px;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 600px;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0px auto;
+}
+
+.form-header {
+  color: grey;
+  padding: 5px 0px;;
+}
+
+
+.form-field {
+  width: 100%;
+  margin: 20px 10px;
+  display: block;
+}
+
+.form-input {
+  border: none;
+  border-bottom: 2px solid grey;
+  width: 100%;
+  outline: none;
+  font-size: 18px;
+  margin: 3px 0px;
+  padding: 5px 0px;
+}
+
+.form-input:focus {
+  border-bottom: 2px solid #31c1e5;
+}
+
+.form-method-button {
+  font-weight: bold;
+  font-size: 20px;
+  color: #31c1e5;
+  border: none;
+  outline: none;
+  padding: 5px;
+}
+
+.form-method-button:hover {
+  cursor: pointer;
+}
+
+.form-method-button.active {
+  border-bottom: 2px solid #31c1e5;
+}
+
+.form-submit {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border: none;
+  padding: 10px;
+  background-color: #31c1e5;
+  border: 2px solid #31c1e5;
+}
+
+.form-submit:hover {
+  cursor: pointer;
+  color: #31c1e5;
+  background-color: white;
 }

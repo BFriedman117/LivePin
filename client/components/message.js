@@ -18,8 +18,8 @@ class Message extends Component {
   }
   render(){
     return (
-      <div>
-        <div>The message is:</div>
+      <div className="form-container">
+        <div className="form-header">The message is:</div>
         <div>{this.state.message}</div>
       </div>
     )
