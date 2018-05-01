@@ -10,7 +10,8 @@ class Form extends Component {
     phone: '',
     validPhone: false,
     method: 'email',
-    focus: null
+    focus: null,
+    success: null
   }
 
   handleFocus = focus => {
@@ -23,6 +24,8 @@ class Form extends Component {
       success = this.state.validPhone
     } else if (type === 'email'){
       success = this.state.validEmail
+    } else if (type === 'message'){
+      success = this.state.body !== ''
     }
 
     if (success){
@@ -30,6 +33,15 @@ class Form extends Component {
         <div className="input-success">✓</div>
       )
     }
+  }
+
+  handleResponse = () => {
+    return (
+      <div className="success-message-container">
+        <div className="success-header">Success!</div>
+        <div className="form-header">Your message is on its way</div>
+      </div>
+    )
   }
 
   parsePhone = input => {
@@ -103,11 +115,12 @@ class Form extends Component {
     if (this.validateSubmit()){
       axios.post('/api/message', message)
       .then(response => {
+        let success = response.status === 200
         this.setState({
           body: '',
           email: '',
           phone: '',
-          method: 'email'
+          success
         })
         return response
       })
@@ -154,8 +167,10 @@ class Form extends Component {
           <div className="form-field" >
             <div className={this.state.focus === 'message' ? 'form-header active' : 'form-header'}>Message:</div>
             <div className={this.state.focus === 'message' ? 'input-container active' : 'input-container'} onClick={() => this.handleFocus('message')}>
-              <input className="form-input" onChange={evt => this.handleMessage(evt.target.value)} value={this.state.body} placeholder="Type a short message for yourself" />
-              {}
+              <input className="form-input" onChange={evt => this.handleMessage(evt.target.value)} value={this.state.body} placeholder="Enter a short message for yourself (40 chars)" />
+              {
+                this.handleSuccess('message')
+              }
             </div>
           </div>
           <div className="form-field method">
@@ -166,7 +181,12 @@ class Form extends Component {
             this.returnContactMethod()
           }
           <div className="form-field">
-            <button className="form-submit" onClick={this.handleSubmit}>Submit</button>
+            <div className="form-submit-container">
+              <button className="form-submit" onClick={this.handleSubmit}>Submit</button>
+              {
+                this.state.success ? this.handleResponse () : null
+              }
+            </div>
           </div>
       </div>
     )

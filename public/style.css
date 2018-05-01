@@ -95,6 +95,12 @@ nav a {
   border-bottom: 2px solid #31c1e5;
 }
 
+.form-submit-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .form-submit {
   color: white;
   font-weight: bold;
@@ -109,4 +115,9 @@ nav a {
   cursor: pointer;
   color: #31c1e5;
   background-color: white;
+}
+
+.success-header {
+  font-weight: bold;
+  font-size: 18px;
 }
