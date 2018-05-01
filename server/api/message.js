@@ -35,7 +35,7 @@ router.post('/', (req, res, next) => {
       Client.messages.create({
         from: '+12014250260',
         to: '+1' + messageData.phone,
-        body: `No working link yet, but the message is: ${messageData.body}`
+        body: `The message is: ${messageData.body}`
       })
     }
     res.json(message)
