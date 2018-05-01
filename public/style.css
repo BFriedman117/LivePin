@@ -37,24 +37,44 @@ nav a {
   padding: 5px 0px;;
 }
 
+.form-header.active {
+  color: #31c1e5;
+}
+
 
 .form-field {
   width: 100%;
   margin: 20px 10px;
-  display: block;
 }
 
 .form-input {
   border: none;
-  border-bottom: 2px solid grey;
   width: 100%;
   outline: none;
   font-size: 18px;
   margin: 3px 0px;
   padding: 5px 0px;
+  flex-grow: 1
 }
 
-.form-input:focus {
+.input-container {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 2px solid grey;
+}
+
+.input-container.active {
+  border-bottom: 2px solid #31c1e5;
+}
+
+.input-success {
+  flex-grow: 2;
+  font-size: 16px;
+  padding-top: 15px;
+  color: #6ff2bb;
+}
+
+.input-container:focus {
   border-bottom: 2px solid #31c1e5;
 }
 
@@ -79,7 +99,7 @@ nav a {
   color: white;
   font-weight: bold;
   font-size: 20px;
-  border: none;
+  outline: none;
   padding: 10px;
   background-color: #31c1e5;
   border: 2px solid #31c1e5;
